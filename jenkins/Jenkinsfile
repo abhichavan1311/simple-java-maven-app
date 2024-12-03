@@ -3,6 +3,15 @@ pipeline {
         label 'slave1'
     }
 
+    parameters {
+         string defaultValue: 'chavan', name: 'LASTNAME'
+    }
+
+    environment {
+         NAME = "Abhishek"
+    }
+
+
     tools {
          maven 'maven1'
     }
@@ -11,7 +20,8 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn clean package -DskipTests'
-                sh 'ls -l target/' // Debugging step
+                sh 'ls -l target/' 
+                echo "hi $Name ${params.LASTNAME}"
             }
         }
         stage('Archive') {
