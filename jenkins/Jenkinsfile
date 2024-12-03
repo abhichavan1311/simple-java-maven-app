@@ -1,24 +1,17 @@
 pipeline {
-    agent {
-        label 'slave1'
-    }
-
-    tools {
-         maven 'maven1'
-    }
-
+    agent any
     stages {
-        stage('build stage') {
+        stage('Build') {
             steps {
-                sh "mvn clean package"
-            }
-
-            post {
-                success {
-                  archiveArtifacts artifacts: '**/target/*.war'  
-                 }
+                sh 'mvn clean package -DskipTests'
+                sh 'ls -l target/' // Debugging step
             }
         }
-
+        stage('Archive') {
+            steps {
+                echo "Archiving artifacts"
+                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+            }
+        }
     }
 }
